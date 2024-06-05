@@ -1,0 +1,8 @@
+@media screen{
+    @page {
+        size: A4 landscape;
+        margin-left: 0px;
+        padding-left: 10mm;
+        }
+
+    }    
