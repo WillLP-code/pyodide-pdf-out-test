@@ -23,7 +23,7 @@ async function run_python() {
                     "y":[0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100]})
 
     fig = px.scatter(df["x"], df["y"])
-    js.document.plot = fig.to_html(include_plotlyjs=False, full_html=False, default_height="350px")
+    js.document.plot = fig.to_html(include_plotlyjs=False, full_html=False, default_height="350px", default_width="350px")
 
     `)
 

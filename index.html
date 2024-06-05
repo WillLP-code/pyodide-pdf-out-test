@@ -18,29 +18,72 @@
    <script src="main.js" type="text/javascript"></script>
 </head>
 
+<body class="bg-white">
+    <div id="submit"><input type="submit" value="Submit" class="btn btn-primary" onclick="run_js()"></div>
+    <div class="spinner d-none" >
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Loading...
+    </div> 
+    <button id="print" type="button" class="btn btn-primary d-none" onclick="print()">Save to pdf</button>
+    
+    <div id="plot"></div>
+    <div id="long_text">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tristique senectus et netus et malesuada fames ac turpis. Nisl vel pretium lectus quam id. Mi sit amet mauris commodo quis imperdiet. Massa id neque aliquam vestibulum morbi blandit cursus risus at. Laoreet sit amet cursus sit amet dictum sit amet justo. Venenatis tellus in metus vulputate eu. Nunc sed blandit libero volutpat sed. Convallis a cras semper auctor. Cras fermentum odio eu feugiat pretium nibh ipsum consequat nisl.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tristique senectus et netus et malesuada fames ac turpis. Nisl vel pretium lectus quam id. Mi sit amet mauris commodo quis imperdiet. Massa id neque aliquam vestibulum morbi blandit cursus risus at. Laoreet sit amet cursus sit amet dictum sit amet justo. Venenatis tellus in metus vulputate eu. Nunc sed blandit libero volutpat sed. Convallis a cras semper auctor. Cras fermentum odio eu feugiat pretium nibh ipsum consequat nisl.</p>
+    </div>
+    
+    </body>
+
 <script>
     window.jsPDF = window.jspdf.jsPDF;
+    document.long_text = document.getElementById("long_text")
     function print(){
-        var doc = new jsPDF();
-        var img2;
+        var doc = new jsPDF('a4', 'in');
+        var img1, img2;
         var pageGap = 10;
-        doc.setFont('helvetica');
-        doc.setFontSize(12);
-
-        doc.text('SEND analysis tool', 10, 10)
-
+        doc.setFont('helvetica')
+        doc.setFontSize(12)
+        
         var img = new Image()
-        var img1
         img.src = 'images/DTI full png.png'
-        doc.addImage(img, 'png', 10, 78, 12, 15)
+        doc.addImage( img, 'png', 1, 1, 1, 1)
 
-        html2canvas(document.getElementById("plot")).then(function (canvas) {
+        doc.text(
+            'SEND analysis tool', 2, 2)
+            .setFontSize(24)
+
+
+        textlines = doc.setFont('helvetica')
+        .setFontSize(12)
+        .splitTextToSize(document.long_text.innerText, 7.25);
+
+        let verticalOffset = 3
+        doc.text(0.5, verticalOffset + 12 / 72, textlines)
+        verticalOffset += (textlines.length + 0.5) * 12 / 72
+
+        html2canvas(document.getElementById("plot"))
+            .then(function (canvas) {
+            // doc.addPage();
+            img1 = canvas.toDataURL("image/png")
+            doc.addImage(img1, 'PNG', 1, 6);
 
             img2 = canvas.toDataURL("image/png")
-            doc.addImage(img2, 'PNG', 10, 150, 190, 100);
+            
+            doc.addImage(img2, 'PNG', 4, 6);
 
             doc.save("plots.pdf");
-      });
+            });
+
+
+    //     html2canvas(document.getElementById("plot"))
+    //         .then(function (canvas) {
+
+    //         img2 = canvas.toDataURL("image/png")
+            
+    //         doc.addImage(img2, 'PNG', 10, 75);
+
+    //         doc.save("plots.pdf");
+    //   });
 
     }   
 
@@ -48,35 +91,6 @@
         $(".spinner").removeClass('d-none');
         run_python()
     }
-    // function pdfFunction() {
-    //     var doc = new jsPDF('a4')  
 
-    //     var img = new Image()
-    //     var img1
-    //     img.src = 'images/DTI full png.png'
-    //     doc.addImage(img, 'png', 10, 78, 12, 15)
-
-    //     html2canvas(document.plot)
-    //         .then(function (canvas) {
-    //             doc.addPage();
-    //             img1 = canvas.toDataURL("image/png")
-    //             doc.addImage(img1, 'PNG', 10, 20, 190, 100)
-    //             doc.save("CanvasJS Charts.pdf");
-    //         });
-
-    //     // doc.text('SEND analysis tool', 10, 10)
-    //     // doc.output("dataurlnewwindow")
-    //   }
 </script>
 
-<body class="bg-white">
-<div id="submit"><input type="submit" value="Submit" class="btn btn-primary" onclick="run_js()"></div>
-<div class="spinner d-none" >
-    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-    Loading...
-</div> 
-<button id="print" type="button" class="btn btn-primary d-none" onclick="print()">Save to pdf</button>
-
-<div id="plot"></div>
-
-</body>
